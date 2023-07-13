@@ -62,6 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               text: 'sp测试页',
             ),
+            CommonActionButton(
+              onTap: () {
+                Navigator.pushNamed(context, '/bed_bind/list', arguments: {'title': 'sp'});
+              },
+              text: '床位绑定列表页',
+            ),
 
             Text(
               '$_counter',

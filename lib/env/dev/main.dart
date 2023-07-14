@@ -6,7 +6,7 @@ void main() {
   runApp(AppConfig(
     config: AppConfigModel(
       envString: 'dev',
-      baseUrl: 'http://web.juhe.cn:8080'
+        baseUrl: 'http://212.129.241.31:8889'
     ),
     child: MyApp(),
   ));

@@ -17,7 +17,7 @@ class ApiTestVM extends ChangeNotifier{
         'key': '76e9fd4ba9e5c9af11deef0f419c03d0',
         'river': '长江流域',
       },
-    ) as Future<Response<dynamic>>);
+    ));
     _data = response.data;
     notifyListeners();
     EasyLoading.dismiss();

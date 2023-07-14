@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_example/api/bed.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 enum ViewMode { list, grid }
 
@@ -14,6 +16,15 @@ class BedBindListPage extends StatefulWidget {
 
 class _BedBindListPageState extends State<BedBindListPage> {
   ViewMode curViewMode = ViewMode.grid;
+  List deptList = [];
+  List bedList = [];
+  Map curDept = {};
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDeptList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,41 +53,50 @@ class _BedBindListPageState extends State<BedBindListPage> {
           children: [
             _buildTitle(),
             SizedBox(height: 20),
-            curViewMode == ViewMode.grid  ? _buildGridContent():_buildListContent(),
+            bedList.length == 0
+                ? Expanded(
+                    child: Center(
+                      child: Text('暂无数据'),
+                    ),
+                  )
+                : curViewMode == ViewMode.grid
+                    ? _buildGridContent()
+                    : _buildListContent(),
           ],
         ));
   }
 
   _buildTitle() {
+    List<DropdownMenuItem<dynamic>> items = [];
+    deptList.forEach((element) {
+      items.add(
+        DropdownMenuItem<String>(
+            value: element['id'], child: Text(element['name'] ?? '--')),
+      );
+    });
     return Row(
       children: [
         Text(
-          '病区名',
+          '病区:',
           style: new TextStyle(
-            fontSize: 22.0,
+            fontSize: 20.0,
             color: const Color(0xFF202020),
           ),
         ),
         SizedBox(width: 30),
         Expanded(
-          child: DropdownButton<String>(
-            onChanged: (res) => popupButtonSelected,
-            value: "Child 1",
-            style: TextStyle(
-              fontSize: 22.0,
-              color: Color(0xFF202020),
-            ),
-            items: <DropdownMenuItem<String>>[
-              const DropdownMenuItem<String>(
-                  value: "Child 1", child: const Text("Child 1")),
-              const DropdownMenuItem<String>(
-                  value: "Child 2", child: const Text("Child 2")),
-              const DropdownMenuItem<String>(
-                  value: "Child 3", child: const Text("Child 3")),
-            ],
-            isExpanded: true,
-          ),
-        )
+            child: items.length > 0 && curDept.isNotEmpty
+                ? DropdownButton<dynamic>(
+                    onChanged: (res) => popupButtonSelected(res),
+                    value: curDept['id'] ?? "--",
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Color(0xFF202020),
+                    ),
+                    items: items,
+                    isExpanded: true,
+                  )
+                : Container())
       ],
     );
   }
@@ -86,39 +106,68 @@ class _BedBindListPageState extends State<BedBindListPage> {
       child: Container(
         width: double.maxFinite,
         height: 100,
-        child: GridView.extent(
-            maxCrossAxisExtent: 80.0,
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
-            padding: const EdgeInsets.all(0.0),
-            children: <Widget>[
-              new FlutterLogo(
-                size: 10.0,
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 80,
+              childAspectRatio: 1,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8),
+          itemCount: bedList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      color: bedList[index]['devBindFlag'] == '1'
+                          ? Colors.green
+                          : Colors.grey.shade300,
+                      width: 2),
+                  borderRadius: BorderRadius.circular(20)),
+              child: Text(
+                bedList[index]['bedNo'],
+                style: new TextStyle(
+                    fontSize: 16.0,
+                    color: bedList[index]['devBindFlag'] == '1'
+                        ? Colors.green
+                        : Colors.grey[500],
+                    fontWeight: FontWeight.w800),
               ),
-              new FlutterLogo(
-                size: 10.0,
-              ),
-              new FlutterLogo(
-                size: 10.0,
-              ),
-              new FlutterLogo(
-                size: 10.0,
-              ),
-              new FlutterLogo(
-                size: 10.0,
-              ),
-              new FlutterLogo(
-                size: 10.0,
-              ),
-            ]),
+            );
+          },
+        ),
       ),
     );
   }
-  _buildListContent(){
-  return Container();
+
+  _buildListContent() {
+    return Expanded(
+        child: ListView.builder(
+            itemCount: bedList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                margin: EdgeInsets.symmetric(vertical: 4),
+                child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 12),
+                    height: 50,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Text(bedList[index]['bedNo']),
+                        Expanded(child: Text(bedList[index]['devUid'],textAlign: TextAlign.end,)),
+                      ],
+                    )),
+              );
+            }));
   }
 
-  void popupButtonSelected(String value) {}
+  void popupButtonSelected(value) {
+    print(value);
+    var dept = deptList.firstWhere((i) => i['id'] == value);
+    curDept = dept;
+    setState(() {});
+    getBedList();
+  }
+
   void buttonPressed() {
     if (curViewMode == ViewMode.grid) {
       curViewMode = ViewMode.list;
@@ -126,5 +175,22 @@ class _BedBindListPageState extends State<BedBindListPage> {
       curViewMode = ViewMode.grid;
     }
     setState(() {});
+  }
+
+  getDeptList() async {
+    await BedApi().getDeptList().then((value) {
+      deptList = value['data'];
+      curDept = deptList[0];
+      setState(() {});
+      getBedList();
+    });
+  }
+
+  getBedList() async {
+    await BedApi().getBedList(curDept['id']).then((value) {
+      print(value);
+      bedList = value['data'] ?? [];
+      setState(() {});
+    });
   }
 }

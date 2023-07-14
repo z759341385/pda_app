@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_demo_example/app/app_config.dart';
 import 'package:flutter_demo_example/app/app_constans.dart';
 import 'package:flutter_demo_example/http/interceptors/log.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 enum Method { GET, POST, PUT, DELETE, HEAD, PATH, DOWNLOAD }
 
@@ -69,10 +70,16 @@ class Api {
     // 处理请求
     Response response;
     try {
+      EasyLoading.show(status: '加载中...');
+
       response = await _dio!.request(path, data: data, options: options, queryParameters: queryParameters);
     } on DioError catch (e) {
+      EasyLoading.dismiss();
+
       return e.response ?? {"message": '网络异常，请检查网络', "code": 0};
     }
+    EasyLoading.dismiss();
+
     return response;
   }
 }

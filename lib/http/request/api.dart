@@ -30,7 +30,7 @@ class Api {
         },
       ),
     );
-
+    _dio?.interceptors.add(LogInterceptor(responseBody: true));
     ///日志拦截器
     _dio!.interceptors.add(LogsInterceptors());
 
@@ -40,6 +40,7 @@ class Api {
     //   return client;
     // };
   }
+  //http://212.129.241.31:8889/app/getOffice
 
   Future request(
     path, {

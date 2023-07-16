@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_example/modules/component/button/common_action_button.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:r_scan/r_scan.dart';
 
 import 'home_page_vm.dart';
 
@@ -68,7 +70,12 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               text: '床位绑定列表页',
             ),
-
+            CommonActionButton(
+              onTap: () {
+                Navigator.pushNamed(context, '/bed_bind/device', arguments: {'title': 'sp'});
+              },
+              text: '床位绑定',
+            ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,

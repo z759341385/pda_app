@@ -24,4 +24,29 @@ class BedApi {
     ));
     return response.data;
   }
+  /// Get 获取设备绑定状态
+  Future<dynamic> getDeviceStatus(String devUid) async {
+    String path = '/app/getDevState';
+    Response response = await (Api().request(
+      path,
+      method: Method.GET,
+      queryParameters: {
+        'devUid':devUid
+      },
+    ));
+    return response.data;
+  }
+  //e89f6d708f60
+  /// 解绑设备
+  Future<dynamic> unbindDevice(String devUid) async {
+    String path = '/app/unbindBed';
+    Response response = await (Api().request(
+      path,
+      method: Method.GET,
+      queryParameters: {
+        'devUid':devUid
+      },
+    ));
+    return response.data;
+  }
 }

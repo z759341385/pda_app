@@ -37,9 +37,19 @@ dependencies:
   shared_preferences: ^2.0.6
 #  路由管理
   fluro: ^2.0.3
+  image_picker: ^0.7.0
+  permission_handler: ^9.0.0
+  scan:
+    git:
+      url: https://github.com/xiaoxie/flutter_scan.git
+      ref: main
+  r_scan: #^0.1.6+1
+    #    path: ../r_scan-master
+    git: https://github.com/wangzewa/r_scan_change.git
 
   #工具类
   common_utils: ^2.0.2
+  fluttertoast: 8.0.2
 
 dev_dependencies:
   flutter_test:
@@ -54,10 +64,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
-
+  assets:
+    - lib/assets/icon/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -68,7 +76,7 @@ flutter:
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
-  # example:
+  # xhzn:
   # fonts:
   #   - family: Schyler
   #     fonts:

@@ -19,7 +19,8 @@ class BindVM extends ChangeNotifier{
   String get deviceId => _deviceId;
 
   //查询设备状态
-  searchStatus(String id){
+  searchStatus(){
+    String id =deviceInput.text;
     if(id.trim().isEmpty){
       ToastUtils.showToastCenter('请输入设备码');
       return;
@@ -77,8 +78,8 @@ class BindVM extends ChangeNotifier{
 
   //跳转绑定
   jumpBind(){
-    Navigator.pushNamed(Global.navigatorKey.currentContext!, '/bed_bind/list', arguments: {'title': 'sp'}).then((value) => {
-
+    Navigator.pushNamed(Global.navigatorKey.currentContext!, '/bed_bind/list', arguments: {'title': 'sp','devUid':deviceId}).then((value) => {
+      searchStatus()
     });
   }
 

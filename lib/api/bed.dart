@@ -49,4 +49,17 @@ class BedApi {
     ));
     return response.data;
   }
+  /// 绑定设备
+  Future<dynamic> bindDevice(String devUid,String bedId) async {
+    String path = '/app/bindBed';
+    Response response = await (Api().request(
+      path,
+      method: Method.GET,
+      queryParameters: {
+        'devUid':devUid,
+        'bedId':bedId
+      },
+    ));
+    return response.data;
+  }
 }

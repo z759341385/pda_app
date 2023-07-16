@@ -19,10 +19,13 @@ class _BedBindListPageState extends State<BedBindListPage> {
   List deptList = [];
   List bedList = [];
   Map curDept = {};
+  String devUid ='';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+     devUid = widget.arguments['devUid'];
+  print(devUid);
     getDeptList();
   }
 
@@ -114,23 +117,32 @@ class _BedBindListPageState extends State<BedBindListPage> {
               mainAxisSpacing: 8),
           itemCount: bedList.length,
           itemBuilder: (BuildContext context, int index) {
-            return Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  border: Border.all(
+            return GestureDetector(
+              onTap: (){
+                if(bedList[index]['devBindFlag'] == '1'){
+                  EasyLoading.showError('该床位已绑定！');
+                  return;
+                }
+                goBind(bedList[index]['bedId']);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: bedList[index]['devBindFlag'] == '1'
+                            ? Colors.green
+                            : Colors.grey.shade300,
+                        width: 2),
+                    borderRadius: BorderRadius.circular(20)),
+                child: Text(
+                  bedList[index]['bedNo'],
+                  style: new TextStyle(
+                      fontSize: 16.0,
                       color: bedList[index]['devBindFlag'] == '1'
                           ? Colors.green
-                          : Colors.grey.shade300,
-                      width: 2),
-                  borderRadius: BorderRadius.circular(20)),
-              child: Text(
-                bedList[index]['bedNo'],
-                style: new TextStyle(
-                    fontSize: 16.0,
-                    color: bedList[index]['devBindFlag'] == '1'
-                        ? Colors.green
-                        : Colors.grey[500],
-                    fontWeight: FontWeight.w800),
+                          : Colors.grey[500],
+                      fontWeight: FontWeight.w800),
+                ),
               ),
             );
           },
@@ -144,18 +156,27 @@ class _BedBindListPageState extends State<BedBindListPage> {
         child: ListView.builder(
             itemCount: bedList.length,
             itemBuilder: (BuildContext context, int index) {
-              return Card(
-                margin: EdgeInsets.symmetric(vertical: 4),
-                child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 12),
-                    height: 50,
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      children: [
-                        Text(bedList[index]['bedNo']),
-                        Expanded(child: Text(bedList[index]['devUid'],textAlign: TextAlign.end,)),
-                      ],
-                    )),
+              return GestureDetector(
+                onTap: (){
+                  if(bedList[index]['devBindFlag'] == '1'){
+                    EasyLoading.showError('该床位已绑定！');
+                    return;
+                  }
+                  goBind(bedList[index]['bedId']);
+                },
+                child: Card(
+                  margin: EdgeInsets.symmetric(vertical: 4),
+                  child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 12),
+                      height: 50,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Text(bedList[index]['bedNo']),
+                          Expanded(child: Text(bedList[index]['devUid'],textAlign: TextAlign.end,)),
+                        ],
+                      )),
+                ),
               );
             }));
   }
@@ -190,6 +211,16 @@ class _BedBindListPageState extends State<BedBindListPage> {
     await BedApi().getBedList(curDept['id']).then((value) {
       print(value);
       bedList = value['data'] ?? [];
+      setState(() {});
+    });
+  }
+  goBind(bedId) async {
+    await BedApi().bindDevice(devUid,bedId).then((value) {
+      print(value);
+      if(value['ret'] =='1'){
+        EasyLoading.showSuccess('绑定成功');
+        Navigator.pop(context);
+      }
       setState(() {});
     });
   }

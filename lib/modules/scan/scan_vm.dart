@@ -34,6 +34,9 @@ class ScanVM extends ChangeNotifier{
             _isFirst = false;
             return;
           }
+          if(result ==null){
+            return;
+          }
           scanResult(result?.message.toString());
         })
         ..initialize().then((_) async{

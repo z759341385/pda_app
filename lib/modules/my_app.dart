@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_example/app/app_config.dart';
+import 'package:flutter_demo_example/modules/bed_bind/bind/bind_page.dart';
 import 'package:flutter_demo_example/routes/route_handler.dart';
 import 'package:flutter_demo_example/utils/global.dart';
 import 'package:flutter_demo_example/utils/share_prefrences_util.dart';
@@ -32,7 +33,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo  ${AppConfig.instance?.config?.envString ?? 'null'}'),
+      home: BindPage(arguments: {},),
       builder: EasyLoading.init(),
       navigatorKey: Global.navigatorKey,
     );

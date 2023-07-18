@@ -53,15 +53,35 @@ class BindVM extends ChangeNotifier{
   }
 
   //解绑
-  unbindBed(String id)async{
-    var res = await BedApi().unbindDevice(_deviceId);
-    if(res['ret'] == "1"){
-      _deviceStatus = 0;
-      _statusString = "未绑定";
-    }else{
-      ToastUtils.showToastCenter("解绑失败");
-    }
-    notifyListeners();
+  unbindBed(String id,BuildContext context)async{
+    var alertDialogs = await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("提示"),
+            content: const Text("确定要解绑该床位吗？"),
+            actions: <Widget>[
+              TextButton(onPressed: () {
+                Navigator.pop(context, "Cancel");
+              },
+                  child: const Text("取消")),
+              TextButton(onPressed: () async{
+                Navigator.pop(context);
+                var res = await BedApi().unbindDevice(_deviceId);
+                if(res['ret'] == "1"){
+                  _deviceStatus = 0;
+                  _statusString = "未绑定";
+                }else{
+                  ToastUtils.showToastCenter("解绑失败");
+                }
+                notifyListeners();
+              },
+                  child: const Text("确定")),
+            ],
+          );
+        });
+    return alertDialogs;
+
   }
   //更新clear
   updateCLear(){

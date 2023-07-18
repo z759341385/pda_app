@@ -30,14 +30,15 @@ class ScanVM extends ChangeNotifier{
         ..addListener(() {
           final result = _controller.result;
           debugPrint("-=-=-=-=-=$result");
-          if(_isFirst){
-            _isFirst = false;
-            return;
-          }
           if(result ==null){
             return;
           }
-          scanResult(result?.message.toString());
+          if(_isFirst){
+            _isFirst = false;
+            scanResult(result.message.toString());
+            return;
+          }
+
         })
         ..initialize().then((_) async{
           isFront = (await _controller.getFlashMode())??false;

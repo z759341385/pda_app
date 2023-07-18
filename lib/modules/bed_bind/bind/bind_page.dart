@@ -173,7 +173,7 @@ class _BindPageState extends State<BindPage> {
     return GestureDetector(
       onTap: (){
         _vm.clearFocus();
-        type == 0?_vm.jumpBind():_vm.unbindBed(_vm.deviceInput.text);
+        type == 0?_vm.jumpBind():_vm.unbindBed(_vm.deviceInput.text,context);
       },
       child: Container(
         width: double.infinity,

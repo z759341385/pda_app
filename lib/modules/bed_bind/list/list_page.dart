@@ -215,13 +215,32 @@ class _BedBindListPageState extends State<BedBindListPage> {
     });
   }
   goBind(bedId) async {
-    await BedApi().bindDevice(devUid,bedId).then((value) {
-      print(value);
-      if(value['ret'] =='1'){
-        EasyLoading.showSuccess('绑定成功');
-        Navigator.pop(context);
-      }
-      setState(() {});
-    });
+    var alertDialogs = await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("提示"),
+            content: const Text("确定要绑定该床位吗？"),
+            actions: <Widget>[
+              TextButton(onPressed: () {
+                Navigator.pop(context, "Cancel");
+              },
+                  child: const Text("取消")),
+              TextButton(onPressed: () async{
+                Navigator.pop(context);
+                await BedApi().bindDevice(devUid,bedId).then((value) {
+                  print(value);
+                  if(value['ret'] =='1'){
+                    EasyLoading.showSuccess('绑定成功');
+                    Navigator.pop(context);
+                  }
+                  setState(() {});
+                });
+              },
+                  child: const Text("确定")),
+            ],
+          );
+        });
+    return alertDialogs;
   }
 }

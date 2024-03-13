@@ -36,6 +36,7 @@ class ScanVM extends ChangeNotifier{
             _isFirst = false;
             scanResult(result.message);
           }
+
         })
         ..initialize().then((_) async{
           isFront = (await _controller.getFlashMode())??false;

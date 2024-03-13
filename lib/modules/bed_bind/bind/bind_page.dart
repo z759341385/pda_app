@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_example/components/ComAppBar.dart';
 import 'package:flutter_demo_example/modules/bed_bind/bind/bind_vm.dart';
 import 'package:flutter_demo_example/styles/colours.dart';
 import 'package:flutter_demo_example/styles/lables.dart';
@@ -30,9 +31,10 @@ class _BindPageState extends State<BindPage> {
         return GestureDetector(
           onTap:_vm.clearFocus,
           child: Scaffold(
-            appBar: AppBar(
-              title: Text('床位绑定'),
-              elevation: 0,
+            backgroundColor: Colors.grey[300],
+            appBar:  ComAppBar.title(
+              title: '床位绑定',
+              hasBackView: false,
               actions: [
                 GestureDetector(
                   onTap: () {
@@ -45,12 +47,14 @@ class _BindPageState extends State<BindPage> {
                     child: Image.asset(
                       'lib/assets/icon/scan.png',
                       width: 26,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                 )
               ],
+
             ),
+
             body: _buildBody(context),
           ),
         );
@@ -61,7 +65,6 @@ class _BindPageState extends State<BindPage> {
   Widget _buildBody(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: Colors.transparent,
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
@@ -173,7 +176,7 @@ class _BindPageState extends State<BindPage> {
     return GestureDetector(
       onTap: (){
         _vm.clearFocus();
-        type == 0?_vm.jumpBind():_vm.unbindBed(_vm.deviceInput.text);
+        type == 0?_vm.jumpBind():_vm.unbindBed(_vm.deviceInput.text,context);
       },
       child: Container(
         width: double.infinity,

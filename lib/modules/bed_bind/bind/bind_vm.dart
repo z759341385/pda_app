@@ -10,7 +10,7 @@ class BindVM extends ChangeNotifier{
   int get deviceStatus => _deviceStatus;
   late String _bindBed = "";
   String get bindBed => _bindBed;
-  late String _statusString = "未扫描";
+  late String _statusString = "未查询";
   String get statusString => _statusString;
   late bool _showClear = false;
   bool get showClear => _showClear;

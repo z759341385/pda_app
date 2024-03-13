@@ -29,12 +29,13 @@ class ScanVM extends ChangeNotifier{
           _rScanCameras[0], RScanCameraResolutionPreset.high)
         ..addListener(() {
           final result = _controller.result;
-          debugPrint("-=-=-=-=-=$result");
-          if(_isFirst){
-            _isFirst = false;
+          if(result==null){
             return;
           }
-          scanResult(result?.message.toString());
+          if(_isFirst){
+            _isFirst = false;
+            scanResult(result.message);
+          }
         })
         ..initialize().then((_) async{
           isFront = (await _controller.getFlashMode())??false;
@@ -64,8 +65,12 @@ class ScanVM extends ChangeNotifier{
 
   //扫描结果
   scanResult(String? data){
-    debugPrint(data??"");
-    Navigator.pop(Global.navigatorKey.currentContext!,data);
+    try{
+      debugPrint(data??""+"7777777777");
+      Navigator.pop(Global.navigatorKey.currentContext!,data);
+    }catch(e){
+      debugPrint("-=-=-=-=-$e");
+    }
   }
 
   pop(){

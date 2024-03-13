@@ -27,16 +27,24 @@ dependencies:
   #网络请求
   dio: ^4.0.0
   #加载dialog
-#  flutter_easyloading: ^2.0.0
   flutter_easyloading: ^3.0.0
   #状态管理
 #  provider: ^4.0.0
   provider: ^5.0.0
-#  持久化存储
-#  shared_preferences: ^0.5.12
+  flutter_screenutil: 5.0.0
+  #  持久化存储
   shared_preferences: ^2.0.6
+  #时间总线
+  event_bus: 2.0.0
+# 底部导航栏
+  animated_bottom_navigation_bar: ^0.3.2
+# 字体大小缩放
+  auto_size_text: ^3.0.0-nullsafety.0
 #  路由管理
   fluro: ^2.0.3
+#  震动
+  vibration: 1.7.4
+
   image_picker: ^0.7.0
   permission_handler: ^9.0.0
   scan:
